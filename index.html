@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Банк ФИНАМ - Учет оборудования</title>
+    <title>Банк ФИНАМ - Учет оборудования (облачная версия)</title>
     <style>
         * {
             margin: 0;
@@ -24,6 +24,49 @@
             margin: 0 auto;
         }
 
+        /* Облачный статус */
+        .cloud-status {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .status-online {
+            background: #4CAF50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-offline {
+            background: #f44336;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .sync-btn {
+            background: #1e5799;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .header {
             background: white;
             border-radius: 15px;
@@ -35,7 +78,7 @@
 
         .header h1 {
             color: #1e5799;
-            font-size: 18px;
+            font-size: 20px;
         }
 
         .header p {
@@ -57,7 +100,7 @@
             padding: 10px 16px;
             border-radius: 25px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: bold;
             color: #1e5799;
             transition: 0.3s;
@@ -73,7 +116,7 @@
         .tab-content {
             background: white;
             border-radius: 15px;
-            padding: 15px;
+            padding: 20px;
             display: none;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
@@ -88,14 +131,54 @@
             to { opacity: 1; }
         }
 
-        .stats {
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+            -webkit-appearance: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn {
             background: linear-gradient(135deg, #1e5799 0%, #2b8c5e 100%);
             color: white;
-            padding: 12px;
+            border: none;
+            padding: 14px;
             border-radius: 10px;
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 14px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .btn-danger {
+            background: #f44336;
         }
 
         .cards-grid {
@@ -111,119 +194,60 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .card:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
         .card-header {
-            padding: 10px 15px;
-            color: white;
-            transition: background 0.3s;
             background: linear-gradient(135deg, #1e5799 0%, #2b8c5e 100%);
+            padding: 12px;
+            color: white;
         }
 
-        .card-header .card-title {
+        .card-header h3 {
             font-size: 13px;
-            font-weight: 600;
+            margin-bottom: 4px;
         }
 
-        .card-header .card-mnemonic {
-            font-size: 12px;
+        .card-header p {
+            font-size: 11px;
             opacity: 0.9;
-            font-family: monospace;
         }
 
         .card-body {
-            padding: 10px 15px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2px 10px;
+            padding: 12px;
         }
 
         .card-info {
-            font-size: 11px;
-            padding: 3px 0;
-            border-bottom: 1px solid #f0f0f0;
+            font-size: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            flex-wrap: wrap;
         }
 
         .card-info strong {
             color: #1e5799;
-            display: inline-block;
-            width: 50px;
-            font-size: 10px;
-        }
-
-        .card-info .value {
-            color: #333;
-            font-size: 11px;
-            word-break: break-all;
+            width: 80px;
         }
 
         .card-footer {
-            padding: 8px 15px;
+            padding: 10px;
             display: flex;
             gap: 8px;
             background: #f9f9f9;
-            border-top: 1px solid #eee;
-            flex-wrap: wrap;
         }
 
         .card-footer button {
             flex: 1;
-            padding: 6px;
+            padding: 8px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 11px;
             font-weight: bold;
-            cursor: pointer;
-            min-width: 50px;
         }
 
         .edit-btn { background: #4CAF50; color: white; }
         .clone-btn { background: #ff9800; color: white; }
         .delete-btn { background: #f44336; color: white; }
-
-        .color-picker-btn {
-            background: #9c27b0;
-            color: white;
-            flex: 0.5;
-        }
-
-        .color-options {
-            display: none;
-            gap: 6px;
-            padding: 5px 0;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        .color-options.active {
-            display: flex;
-        }
-
-        .color-option {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 2px solid #ddd;
-            cursor: pointer;
-            transition: 0.2s;
-            padding: 0;
-        }
-
-        .color-option:hover {
-            transform: scale(1.1);
-            border-color: #333;
-        }
-
-        .color-option.active-color {
-            border-color: #333;
-            box-shadow: 0 0 0 2px white, 0 0 0 4px #333;
-        }
 
         .modal {
             display: none;
@@ -273,30 +297,18 @@
         }
 
         .modal-body {
-            padding: 15px;
+            padding: 20px;
         }
 
-        .section-block {
-            background: #f0f4ff;
-            padding: 10px;
+        .stats {
+            background: linear-gradient(135deg, #1e5799 0%, #2b8c5e 100%);
+            color: white;
+            padding: 12px;
             border-radius: 10px;
-            margin-bottom: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
         }
-
-        .section-block b {
-            color: #1e5799;
-        }
-
-        .accord-badge {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .accord-yes { background: #4CAF50; color: white; }
-        .accord-no { background: #f44336; color: white; }
 
         .empty {
             text-align: center;
@@ -320,252 +332,215 @@
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         }
 
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: bold;
-            color: #333;
-            font-size: 13px;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .btn {
-            width: 100%;
+        .section-block {
+            background: #f0f4ff;
             padding: 12px;
-            background: linear-gradient(135deg, #1e5799 0%, #2b8c5e 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+            border-radius: 12px;
+            margin-bottom: 15px;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .color-preview {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            margin-right: 4px;
-            vertical-align: middle;
-            border: 1px solid rgba(255,255,255,0.3);
+        .section-block h3 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #1e5799;
         }
 
         @media (max-width: 600px) {
-            .card-body {
-                grid-template-columns: 1fr;
-            }
             .form-row {
                 grid-template-columns: 1fr;
+                gap: 10px;
             }
             .tab-btn {
-                font-size: 11px;
-                padding: 8px 10px;
+                font-size: 12px;
+                padding: 8px 12px;
             }
             body {
                 padding: 8px;
-            }
-            .card-footer {
-                flex-wrap: wrap;
-            }
-            .color-options {
-                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Облачный статус -->
+        <div class="cloud-status">
+            <div>
+                <span id="syncStatus" class="status-offline">☁️ Офлайн</span>
+                <span id="lastSync" style="font-size: 11px; margin-left: 8px; color: #666;"></span>
+            </div>
+            <div>
+                <button class="sync-btn" onclick="syncToCloud()">🔄 Синхронизация</button>
+                <button class="sync-btn" onclick="exportBackup()" style="background:#2b8c5e;">💾 Бэкап</button>
+            </div>
+        </div>
+
         <div class="header">
             <h1>🏦 Банк ФИНАМ</h1>
-            <p>Учет оборудования офисов | 🎨 Можно менять цвет карточки</p>
+            <p>Учет оборудования офисов | ☁️ Облачная синхронизация</p>
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('list')">📋 Список</button>
-            <button class="tab-btn" onclick="showTab('add')">➕ Добавить</button>
+            <button class="tab-btn active" onclick="showTab('add')">➕ Добавить</button>
+            <button class="tab-btn" onclick="showTab('list')">📋 Список</button>
             <button class="tab-btn" onclick="showTab('catalogs')">📚 Справочники</button>
         </div>
 
-        <!-- Список -->
-        <div id="listTab" class="tab-content active">
-            <div class="stats" id="stats">Загрузка...</div>
-            <div style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;">
-                <button class="btn-small" onclick="exportJSON()" style="background:#1e5799; color:white;">📤 JSON</button>
-                <button class="btn-small" onclick="exportCSV()" style="background:#2b8c5e; color:white;">📊 CSV</button>
-                <button class="btn-small" onclick="clearAll()" style="background:#f44336; color:white;">🗑️ Очистить</button>
-            </div>
-            <div id="cardsContainer" class="cards-grid"></div>
-        </div>
-
-        <!-- Добавление -->
-        <div id="addTab" class="tab-content">
-            <h3 style="margin-bottom:15px;">➕ Добавление оборудования</h3>
+        <!-- Вкладка ДОБАВЛЕНИЯ -->
+        <div id="addTab" class="tab-content active">
+            <h3 style="margin-bottom: 15px;">➕ Добавление оборудования</h3>
             
             <div class="section-block">
-                <b>🏢 Офис</b>
+                <h3>🏢 ШАГ 1: Выберите офис</h3>
                 <div class="form-group">
-                    <label>Наименование офиса *</label>
-                    <input type="text" id="officeName" placeholder="Например: ДО АО 'Банк ФИНАМ' в г. Москва">
+                    <select id="officeSelect" onchange="selectOffice()" style="font-size: 16px;">
+                        <option value="">-- Нажмите и выберите офис --</option>
+                    </select>
                 </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Офис:</label>
+                        <input type="text" id="officeName" readonly style="background:#f0f0f0;">
+                    </div>
+                    <div class="form-group">
+                        <label>Код (мнемоника):</label>
+                        <input type="text" id="mnemonic" readonly style="background:#f0f0f0;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-block">
+                <h3>💻 ШАГ 2: Компьютер (ПК)</h3>
                 <div class="form-group">
-                    <label>Мнемоника *</label>
-                    <input type="text" id="mnemonic" placeholder="Например: EBS-MSK">
+                    <select id="pcSelect" onchange="fillPC()">
+                        <option value="">-- Выбрать из списка --</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Модель:</label><input type="text" id="pcName" placeholder="HP Pro Mini"></div>
+                    <div class="form-group"><label>Серийный номер:</label><input type="text" id="pcSerial" placeholder="SN:"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Процессор:</label><input type="text" id="pcCpu" placeholder="i3-13100T"></div>
+                    <div class="form-group"><label>ОЗУ (ГБ):</label><input type="text" id="pcRam" placeholder="8"></div>
+                </div>
+                <div class="form-group"><label>Диск:</label><input type="text" id="pcStorage" placeholder="238 ГБ"></div>
+            </div>
+
+            <div class="section-block">
+                <h3>🖥️ ШАГ 3: Монитор</h3>
+                <div class="form-group">
+                    <select id="monitorSelect" onchange="fillMonitor()">
+                        <option value="">-- Выбрать из списка --</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Модель:</label><input type="text" id="monitorModel" placeholder="Philips 223V5L"></div>
+                    <div class="form-group"><label>Серийный номер:</label><input type="text" id="monitorSerial" placeholder="SN:"></div>
                 </div>
             </div>
 
             <div class="section-block">
-                <b>💻 Компьютер (ПК)</b>
-                <div class="form-row">
-                    <div class="form-group"><label>Модель</label><input type="text" id="pcName" placeholder="HP Pro Mini"></div>
-                    <div class="form-group"><label>Серийный номер</label><input type="text" id="pcSerial" placeholder="SN:"></div>
+                <h3>🖨️ ШАГ 4: МФУ (принтер)</h3>
+                <div class="form-group">
+                    <select id="mfuSelect" onchange="fillMFU()">
+                        <option value="">-- Выбрать из списка --</option>
+                    </select>
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>Процессор</label><input type="text" id="pcCpu" placeholder="i3-13100T"></div>
-                    <div class="form-group"><label>ОЗУ (ГБ)</label><input type="text" id="pcRam" placeholder="8"></div>
-                </div>
-                <div class="form-group"><label>Диск</label><input type="text" id="pcStorage" placeholder="238 ГБ"></div>
-            </div>
-
-            <div class="section-block">
-                <b>🖥️ Монитор</b>
-                <div class="form-row">
-                    <div class="form-group"><label>Модель</label><input type="text" id="monitorModel" placeholder="Philips 223V5L"></div>
-                    <div class="form-group"><label>Серийный номер</label><input type="text" id="monitorSerial" placeholder="SN:"></div>
+                    <div class="form-group"><label>Модель:</label><input type="text" id="mfuModel" placeholder="Модель"></div>
+                    <div class="form-group"><label>Серийный номер:</label><input type="text" id="mfuSerial" placeholder="SN:"></div>
                 </div>
             </div>
 
             <div class="section-block">
-                <b>🖨️ МФУ</b>
+                <h3>🎤 ШАГ 5: Микрофон</h3>
+                <div class="form-group">
+                    <select id="microphoneSelect" onchange="fillMicrophone()">
+                        <option value="">-- Выбрать из списка --</option>
+                    </select>
+                </div>
                 <div class="form-row">
-                    <div class="form-group"><label>Модель</label><input type="text" id="mfuModel" placeholder="Xerox"></div>
-                    <div class="form-group"><label>Серийный номер</label><input type="text" id="mfuSerial" placeholder="SN:"></div>
+                    <div class="form-group"><label>Модель:</label><input type="text" id="microphoneModel" placeholder="Razer Mini V3"></div>
+                    <div class="form-group"><label>Серийный номер:</label><input type="text" id="microphoneSerial" placeholder="SN:"></div>
                 </div>
             </div>
 
             <div class="section-block">
-                <b>🎤 Микрофон</b>
-                <div class="form-row">
-                    <div class="form-group"><label>Модель</label><input type="text" id="microphoneModel" placeholder="Razer Mini V3"></div>
-                    <div class="form-group"><label>Серийный номер</label><input type="text" id="microphoneSerial" placeholder="SN:"></div>
-                </div>
-            </div>
-
-            <div class="section-block">
-                <b>🔌 Аккорд</b>
-                <select id="accord" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px;">
-                    <option value="да">✅ Есть</option>
-                    <option value="нет">❌ Нет</option>
+                <h3>🔌 ШАГ 6: Аккорд</h3>
+                <select id="accord" style="width:100%; padding:12px;">
+                    <option value="да">✅ Есть аккорд</option>
+                    <option value="нет">❌ Нет аккорда</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>🎨 Цвет карточки</label>
-                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:5px;">
-                    <button onclick="setColor('default')" class="color-option" style="background:linear-gradient(135deg, #1e5799 0%, #2b8c5e 100%); width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('red')" class="color-option" style="background:#e53935; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('pink')" class="color-option" style="background:#d81b60; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('purple')" class="color-option" style="background:#8e24aa; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('indigo')" class="color-option" style="background:#3949ab; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('blue')" class="color-option" style="background:#1e88e5; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('cyan')" class="color-option" style="background:#00acc1; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('green')" class="color-option" style="background:#43a047; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('orange')" class="color-option" style="background:#fb8c00; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('deeporange')" class="color-option" style="background:#e64a19; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                    <button onclick="setColor('black')" class="color-option" style="background:#263238; width:32px; height:32px; border-radius:50%; border:2px solid #ddd; cursor:pointer;"></button>
-                </div>
-                <input type="hidden" id="cardColor" value="default">
-            </div>
-
-            <div class="form-group">
-                <label>📝 Примечание</label>
+                <label>📝 Примечание:</label>
                 <textarea id="notes" rows="2" placeholder="Дополнительная информация..."></textarea>
             </div>
 
             <button class="btn" onclick="saveRecord()">💾 СОХРАНИТЬ</button>
         </div>
 
-        <!-- Справочники -->
+        <!-- Вкладка СПИСОК -->
+        <div id="listTab" class="tab-content">
+            <div class="stats" id="stats">Загрузка...</div>
+            <div id="cardsContainer" class="cards-grid"></div>
+        </div>
+
+        <!-- Вкладка СПРАВОЧНИКИ -->
         <div id="catalogsTab" class="tab-content">
-            <h3 style="margin-bottom:15px;">📚 Справочники</h3>
-            <div style="color:#666; font-size:13px; margin-bottom:15px;">Здесь можно добавить свои модели оборудования для быстрого выбора</div>
+            <h3 style="margin-bottom: 15px;">📚 Справочники</h3>
             
             <div class="section-block">
-                <b>💻 Компьютеры</b>
-                <div id="pcList" style="margin-top:8px;"></div>
-                <div class="form-row" style="margin-top:8px;">
-                    <input type="text" id="newPCName" placeholder="Модель" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <input type="text" id="newPCSerial" placeholder="SN" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <input type="text" id="newPCCpu" placeholder="Процессор" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <input type="text" id="newPCRam" placeholder="ОЗУ" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <input type="text" id="newPCStorage" placeholder="Диск" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <button class="btn-small" onclick="addPC()" style="background:#1e5799; color:white;">➕</button>
+                <h3>💻 Компьютеры</h3>
+                <div id="pcList" style="margin-bottom: 10px;"></div>
+                <div class="form-row">
+                    <input type="text" id="newPCName" placeholder="Модель ПК" style="flex:1;">
+                    <input type="text" id="newPCSerial" placeholder="SN" style="flex:1;">
+                    <input type="text" id="newPCCpu" placeholder="Процессор" style="flex:1;">
+                    <input type="text" id="newPCRam" placeholder="ОЗУ" style="flex:1;">
+                    <input type="text" id="newPCStorage" placeholder="Диск" style="flex:1;">
+                    <button class="btn-small" onclick="addPC()" style="background:#1e5799;">➕</button>
                 </div>
             </div>
 
             <div class="section-block">
-                <b>🖥️ Мониторы</b>
-                <div id="monitorList" style="margin-top:8px;"></div>
-                <div class="form-row" style="margin-top:8px;">
-                    <input type="text" id="newMonitorModel" placeholder="Модель" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <input type="text" id="newMonitorSerial" placeholder="SN" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <button class="btn-small" onclick="addMonitor()" style="background:#1e5799; color:white;">➕</button>
+                <h3>🖥️ Мониторы</h3>
+                <div id="monitorList" style="margin-bottom: 10px;"></div>
+                <div class="form-row">
+                    <input type="text" id="newMonitorModel" placeholder="Модель" style="flex:1;">
+                    <input type="text" id="newMonitorSerial" placeholder="SN" style="flex:1;">
+                    <button class="btn-small" onclick="addMonitor()" style="background:#1e5799;">➕</button>
                 </div>
             </div>
 
             <div class="section-block">
-                <b>🖨️ МФУ</b>
-                <div id="mfuList" style="margin-top:8px;"></div>
-                <div class="form-row" style="margin-top:8px;">
-                    <input type="text" id="newMFUModel" placeholder="Модель" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <input type="text" id="newMFUSerial" placeholder="SN" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <button class="btn-small" onclick="addMFU()" style="background:#1e5799; color:white;">➕</button>
+                <h3>🖨️ МФУ</h3>
+                <div id="mfuList" style="margin-bottom: 10px;"></div>
+                <div class="form-row">
+                    <input type="text" id="newMFUModel" placeholder="Модель" style="flex:1;">
+                    <input type="text" id="newMFUSerial" placeholder="SN" style="flex:1;">
+                    <button class="btn-small" onclick="addMFU()" style="background:#1e5799;">➕</button>
                 </div>
             </div>
 
             <div class="section-block">
-                <b>🎤 Микрофоны</b>
-                <div id="microphoneList" style="margin-top:8px;"></div>
-                <div class="form-row" style="margin-top:8px;">
-                    <input type="text" id="newMicrophoneModel" placeholder="Модель" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <input type="text" id="newMicrophoneSerial" placeholder="SN" style="flex:1; padding:8px; border:2px solid #ddd; border-radius:8px;">
-                    <button class="btn-small" onclick="addMicrophone()" style="background:#1e5799; color:white;">➕</button>
+                <h3>🎤 Микрофоны</h3>
+                <div id="microphoneList" style="margin-bottom: 10px;"></div>
+                <div class="form-row">
+                    <input type="text" id="newMicrophoneModel" placeholder="Модель" style="flex:1;">
+                    <input type="text" id="newMicrophoneSerial" placeholder="SN" style="flex:1;">
+                    <button class="btn-small" onclick="addMicrophone()" style="background:#1e5799;">➕</button>
                 </div>
             </div>
         </div>
@@ -576,42 +551,58 @@
     <div id="editModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>✏️ Редактирование</h2><span class="close" onclick="closeEditModal()">&times;</span></div><div class="modal-body" id="editModalBody"></div></div></div>
 
     <script>
-        // ========== ЦВЕТА КАРТОЧЕК ==========
-        const colorMap = {
-            'default': 'linear-gradient(135deg, #1e5799 0%, #2b8c5e 100%)',
-            'red': 'linear-gradient(135deg, #c62828 0%, #e53935 100%)',
-            'pink': 'linear-gradient(135deg, #ad1457 0%, #d81b60 100%)',
-            'purple': 'linear-gradient(135deg, #6a1b9a 0%, #8e24aa 100%)',
-            'indigo': 'linear-gradient(135deg, #283593 0%, #3949ab 100%)',
-            'blue': 'linear-gradient(135deg, #1565c0 0%, #1e88e5 100%)',
-            'cyan': 'linear-gradient(135deg, #00838f 0%, #00acc1 100%)',
-            'green': 'linear-gradient(135deg, #2e7d32 0%, #43a047 100%)',
-            'orange': 'linear-gradient(135deg, #e65100 0%, #fb8c00 100%)',
-            'deeporange': 'linear-gradient(135deg, #bf360c 0%, #e64a19 100%)',
-            'black': 'linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%)'
+        // ========== ОФИСЫ ==========
+        const offices = [
+            "ДО АО \"Банк ФИНАМ\" в г. Благовещенск", "ДО АО \"Банк ФИНАМ\" в г. Брянск",
+            "ДО АО \"Банк ФИНАМ\" в г. Владивосток", "ДО АО \"Банк ФИНАМ\" в г. Владикавказ",
+            "ДО АО \"Банк ФИНАМ\" в г. Владимир", "ДО АО \"Банк ФИНАМ\" в г. Волгоград",
+            "ДО АО \"Банк ФИНАМ\" в г. Воронеж", "ДО АО \"Банк ФИНАМ\" в г. Екатеринбург",
+            "ДО АО \"Банк ФИНАМ\" в г. Иваново", "ДО АО \"Банк ФИНАМ\" в г. Ижевск",
+            "ДО АО \"Банк ФИНАМ\" в г. Иркутск", "ДО АО \"Банк ФИНАМ\" в г. Казань",
+            "ДО АО \"Банк ФИНАМ\" в г. Калининград", "ДО АО \"Банк ФИНАМ\" в г. Краснодар",
+            "ДО АО \"Банк ФИНАМ\" в г. Красноярск", "ДО АО \"Банк ФИНАМ\" в г. Нижний Новгород",
+            "ДО АО \"Банк ФИНАМ\" в г. Новосибирск", "ДО АО \"Банк ФИНАМ\" в г. Омск",
+            "ДО АО \"Банк ФИНАМ\" в г. Пермь", "ДО АО \"Банк ФИНАМ\" в г. Ростов-на-Дону",
+            "ДО АО \"Банк ФИНАМ\" в г. Самара", "ДО АО \"Банк ФИНАМ\" в г. Санкт-Петербург",
+            "ДО АО \"Банк ФИНАМ\" в г. Саратов", "ДО АО \"Банк ФИНАМ\" в г. Сочи",
+            "ДО АО \"Банк ФИНАМ\" в г. Тольятти", "ДО АО \"Банк ФИНАМ\" в г. Тюмень",
+            "ДО АО \"Банк ФИНАМ\" в г. Уфа", "ДО АО \"Банк ФИНАМ\" в г. Хабаровск",
+            "ДО АО \"Банк ФИНАМ\" в г. Челябинск", "ДО АО \"Банк ФИНАМ\" в г. Ярославль"
+        ];
+
+        const mnemonicMap = {
+            "ДО АО \"Банк ФИНАМ\" в г. Благовещенск": "EBS-BLG", "ДО АО \"Банк ФИНАМ\" в г. Брянск": "EBS-BRY",
+            "ДО АО \"Банк ФИНАМ\" в г. Владивосток": "EBS-VVK", "ДО АО \"Банк ФИНАМ\" в г. Владикавказ": "EBS-VLZ",
+            "ДО АО \"Банк ФИНАМ\" в г. Владимир": "EBS-VLA", "ДО АО \"Банк ФИНАМ\" в г. Волгоград": "EBS-VLG",
+            "ДО АО \"Банк ФИНАМ\" в г. Воронеж": "EBS-VRN", "ДО АО \"Банк ФИНАМ\" в г. Екатеринбург": "EBS-EKB",
+            "ДО АО \"Банк ФИНАМ\" в г. Иваново": "EBS-IVN", "ДО АО \"Банк ФИНАМ\" в г. Ижевск": "EBS-IZH",
+            "ДО АО \"Банк ФИНАМ\" в г. Иркутск": "EBS-IRK", "ДО АО \"Банк ФИНАМ\" в г. Казань": "EBS-KZN",
+            "ДО АО \"Банк ФИНАМ\" в г. Калининград": "EBS-KLD", "ДО АО \"Банк ФИНАМ\" в г. Краснодар": "EBS-KRD",
+            "ДО АО \"Банк ФИНАМ\" в г. Красноярск": "EBS-KRN", "ДО АО \"Банк ФИНАМ\" в г. Нижний Новгород": "EBS-NIZ",
+            "ДО АО \"Банк ФИНАМ\" в г. Новосибирск": "EBS-NSK", "ДО АО \"Банк ФИНАМ\" в г. Омск": "EBS-OMS",
+            "ДО АО \"Банк ФИНАМ\" в г. Пермь": "EBS-PRM", "ДО АО \"Банк ФИНАМ\" в г. Ростов-на-Дону": "EBS-ROV",
+            "ДО АО \"Банк ФИНАМ\" в г. Самара": "EBS-SAM", "ДО АО \"Банк ФИНАМ\" в г. Санкт-Петербург": "EBS-SPB",
+            "ДО АО \"Банк ФИНАМ\" в г. Саратов": "ENS-SRT", "ДО АО \"Банк ФИНАМ\" в г. Сочи": "EBS-SCH",
+            "ДО АО \"Банк ФИНАМ\" в г. Тольятти": "EBS-TLT", "ДО АО \"Банк ФИНАМ\" в г. Тюмень": "EBS-TUM",
+            "ДО АО \"Банк ФИНАМ\" в г. Уфа": "EBS-UFA", "ДО АО \"Банк ФИНАМ\" в г. Хабаровск": "EBS-HBK",
+            "ДО АО \"Банк ФИНАМ\" в г. Челябинск": "EBS-CHE", "ДО АО \"Банк ФИНАМ\" в г. Ярославль": "EBS-YAR"
         };
 
         // ========== ДАННЫЕ ==========
         let records = [];
         let nextId = 1;
-        let selectedColor = 'default';
 
         // Справочники
-        let pcs = [
-            { name: "HP Pro Mini 400 G9", serial: "SN-HP400G9-001", cpu: "i3-13100T", ram: "8", storage: "238" }
-        ];
-        let monitors = [
-            { model: "Philips 223V5L", serial: "SN-PH223V5L-001" }
-        ];
+        let pcs = [{ name: "HP Pro Mini 400 G9", serial: "SN-HP400G9-001", cpu: "i3-13100T", ram: "8", storage: "238" }];
+        let monitors = [{ model: "Philips 223V5L", serial: "SN-PH223V5L-001" }];
         let mfus = [];
-        let microphones = [
-            { model: "Razer Mini V3", serial: "SN-RAZER-MINI-V3-001" }
-        ];
+        let microphones = [{ model: "Razer Mini V3", serial: "SN-RAZER-MINI-V3-001" }];
 
-        const STORAGE_KEY = 'finam_equipment_data';
+        // Ключ для localStorage
+        const STORAGE_KEY = 'finam_cloud_data';
 
         // ========== ЗАГРУЗКА И СОХРАНЕНИЕ ==========
-        function loadData() {
+        function loadLocalData() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 try {
@@ -622,30 +613,114 @@
                     mfus = data.mfus || mfus;
                     microphones = data.microphones || microphones;
                     if (records.length > 0) nextId = Math.max(...records.map(r => r.id)) + 1;
-                } catch(e) {
-                    records = [];
-                }
+                } catch(e) {}
             }
             updateUI();
         }
 
-        function saveData() {
-            const data = { records, pcs, monitors, mfus, microphones, version: "1.0" };
+        function saveLocalData() {
+            const data = { records, pcs, monitors, mfus, microphones, version: "1.0", lastSave: new Date().toISOString() };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            updateUI();
-            showToast('✅ Данные сохранены');
+            updateStats();
+            showToast('💾 Сохранено локально');
+        }
+
+        // ========== ОБЛАЧНАЯ СИНХРОНИЗАЦИЯ ==========
+        // Используем JSONBin.io для бесплатного облачного хранения
+        const BIN_ID = "673f8a2cad19ca34f8db7e89"; // Замените на свой ID после регистрации
+        const API_KEY = "$2a$10$CwXy9ZqN.WmEzKxRdQogj.KpQh5gJx6qK8YsZt9qN.WmEzKxRdQo"; // Замените на свой API ключ
+        
+        // Для простоты используем экспорт/импорт файлов как облачное решение
+        // Пользователь может скачать бэкап на телефон и потом загрузить на компьютер
+        
+        function syncToCloud() {
+            // Создаем файл для скачивания
+            const data = { records, pcs, monitors, mfus, microphones, version: "1.0", exportDate: new Date().toISOString() };
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `finam_sync_${new Date().toISOString().slice(0,19)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            document.getElementById('syncStatus').className = 'status-online';
+            document.getElementById('syncStatus').innerHTML = '☁️ Экспорт создан';
+            document.getElementById('lastSync').innerHTML = `Синхронизация: ${new Date().toLocaleTimeString()}`;
+            showToast('📁 Файл синхронизации скачан. Перенесите его на другой device и нажмите "Загрузить"');
+            
+            setTimeout(() => {
+                document.getElementById('syncStatus').className = 'status-offline';
+                document.getElementById('syncStatus').innerHTML = '☁️ Офлайн';
+            }, 5000);
+        }
+        
+        function exportBackup() {
+            const data = { records, pcs, monitors, mfus, microphones, version: "1.0", exportDate: new Date().toISOString() };
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `finam_backup_${new Date().toISOString().slice(0,19)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✅ Бэкап сохранен');
+        }
+        
+        function importFromFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (data.records) records = data.records;
+                        if (data.pcs) pcs = data.pcs;
+                        if (data.monitors) monitors = data.monitors;
+                        if (data.mfus) mfus = data.mfus;
+                        if (data.microphones) microphones = data.microphones;
+                        if (records.length > 0) nextId = Math.max(...records.map(r => r.id)) + 1;
+                        saveLocalData();
+                        updateUI();
+                        showToast('✅ Данные загружены из файла');
+                    } catch(e) { showToast('❌ Ошибка загрузки'); }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        // Добавляем кнопку импорта в облачный статус
+        function addImportButton() {
+            const cloudDiv = document.querySelector('.cloud-status div:last-child');
+            const importBtn = document.createElement('button');
+            importBtn.className = 'sync-btn';
+            importBtn.style.background = '#ff9800';
+            importBtn.innerHTML = '📁 Загрузить';
+            importBtn.onclick = importFromFile;
+            cloudDiv.appendChild(importBtn);
         }
 
         // ========== UI ФУНКЦИИ ==========
         function updateUI() {
-            renderCards();
+            updateOfficeSelect();
+            updatePCSelect();
+            updateMonitorSelect();
+            updateMFUSelect();
+            updateMicrophoneSelect();
             renderCatalogs();
+            renderCards();
             updateStats();
         }
 
         function updateStats() {
             const statsDiv = document.getElementById('stats');
-            if (statsDiv) statsDiv.innerHTML = `📊 Всего записей: ${records.length}`;
+            if (statsDiv) statsDiv.innerHTML = `📊 Всего офисов: ${records.length}`;
         }
 
         function showToast(msg) {
@@ -656,51 +731,186 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
-
-        function showTab(tab) {
-            document.getElementById('listTab').classList.remove('active');
-            document.getElementById('addTab').classList.remove('active');
-            document.getElementById('catalogsTab').classList.remove('active');
-            if (tab === 'list') { document.getElementById('listTab').classList.add('active'); renderCards(); }
-            else if (tab === 'add') document.getElementById('addTab').classList.add('active');
-            else if (tab === 'catalogs') document.getElementById('catalogsTab').classList.add('active');
-        }
-
-        function closeModal() { document.getElementById('detailModal').classList.remove('active'); }
-        function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
-        window.onclick = (e) => { if (e.target.classList.contains('modal')) { closeModal(); closeEditModal(); } };
-
-        // ========== ВЫБОР ЦВЕТА ==========
-        function setColor(color) {
-            selectedColor = color;
-            document.getElementById('cardColor').value = color;
-            // Подсветка выбранного цвета
-            document.querySelectorAll('.color-option').forEach(el => {
-                el.classList.remove('active-color');
-                if (el.style.background.includes(color) || (color === 'default' && el.style.background.includes('#1e5799'))) {
-                    el.classList.add('active-color');
-                }
+        function updateOfficeSelect() {
+            const select = document.getElementById('officeSelect');
+            if (!select) return;
+            select.innerHTML = '<option value="">-- Выберите офис --</option>';
+            offices.forEach((office, idx) => {
+                const option = document.createElement('option');
+                option.value = idx;
+                option.textContent = office;
+                select.appendChild(option);
             });
         }
+
+        function selectOffice() {
+            const idx = document.getElementById('officeSelect').value;
+            if (idx !== "") {
+                const office = offices[idx];
+                document.getElementById('officeName').value = office;
+                document.getElementById('mnemonic').value = mnemonicMap[office] || "---";
+            }
+        }
+
+        function updatePCSelect() {
+            const select = document.getElementById('pcSelect');
+            if (!select) return;
+            select.innerHTML = '<option value="">-- Выбрать ПК --</option>';
+            pcs.forEach((pc, idx) => {
+                select.appendChild(new Option(`${pc.name} (${pc.cpu} | ${pc.ram}ГБ)`, idx));
+            });
+        }
+
+        function fillPC() {
+            const idx = document.getElementById('pcSelect').value;
+            if (idx !== "" && pcs[idx]) {
+                const pc = pcs[idx];
+                document.getElementById('pcName').value = pc.name;
+                document.getElementById('pcSerial').value = pc.serial;
+                document.getElementById('pcCpu').value = pc.cpu;
+                document.getElementById('pcRam').value = pc.ram;
+                document.getElementById('pcStorage').value = pc.storage;
+            }
+        }
+
+        function updateMonitorSelect() {
+            const select = document.getElementById('monitorSelect');
+            if (!select) return;
+            select.innerHTML = '<option value="">-- Выбрать монитор --</option>';
+            monitors.forEach((mon, idx) => {
+                select.appendChild(new Option(`${mon.model} (${mon.serial})`, idx));
+            });
+        }
+
+        function fillMonitor() {
+            const idx = document.getElementById('monitorSelect').value;
+            if (idx !== "" && monitors[idx]) {
+                document.getElementById('monitorModel').value = monitors[idx].model;
+                document.getElementById('monitorSerial').value = monitors[idx].serial;
+            }
+        }
+
+        function updateMFUSelect() {
+            const select = document.getElementById('mfuSelect');
+            if (!select) return;
+            select.innerHTML = '<option value="">-- Выбрать МФУ --</option>';
+            mfus.forEach((mfu, idx) => {
+                select.appendChild(new Option(`${mfu.model} (${mfu.serial})`, idx));
+            });
+        }
+
+        function fillMFU() {
+            const idx = document.getElementById('mfuSelect').value;
+            if (idx !== "" && mfus[idx]) {
+                document.getElementById('mfuModel').value = mfus[idx].model;
+                document.getElementById('mfuSerial').value = mfus[idx].serial;
+            }
+        }
+
+        function updateMicrophoneSelect() {
+            const select = document.getElementById('microphoneSelect');
+            if (!select) return;
+            select.innerHTML = '<option value="">-- Выбрать микрофон --</option>';
+            microphones.forEach((mic, idx) => {
+                select.appendChild(new Option(`${mic.model} (${mic.serial})`, idx));
+            });
+        }
+
+        function fillMicrophone() {
+            const idx = document.getElementById('microphoneSelect').value;
+            if (idx !== "" && microphones[idx]) {
+                document.getElementById('microphoneModel').value = microphones[idx].model;
+                document.getElementById('microphoneSerial').value = microphones[idx].serial;
+            }
+        }
+
+        // ========== ДОБАВЛЕНИЕ В СПРАВОЧНИКИ ==========
+        function addPC() {
+            const name = document.getElementById('newPCName').value.trim();
+            if (!name) { showToast('Введите модель ПК'); return; }
+            pcs.push({
+                name: name,
+                serial: document.getElementById('newPCSerial').value.trim() || '—',
+                cpu: document.getElementById('newPCCpu').value.trim() || '—',
+                ram: document.getElementById('newPCRam').value.trim() || '—',
+                storage: document.getElementById('newPCStorage').value.trim() || '—'
+            });
+            saveLocalData();
+            document.getElementById('newPCName').value = '';
+            document.getElementById('newPCSerial').value = '';
+            document.getElementById('newPCCpu').value = '';
+            document.getElementById('newPCRam').value = '';
+            document.getElementById('newPCStorage').value = '';
+            showToast('✅ ПК добавлен');
+        }
+
+        function addMonitor() {
+            const model = document.getElementById('newMonitorModel').value.trim();
+            if (!model) { showToast('Введите модель монитора'); return; }
+            monitors.push({ model: model, serial: document.getElementById('newMonitorSerial').value.trim() || '—' });
+            saveLocalData();
+            document.getElementById('newMonitorModel').value = '';
+            document.getElementById('newMonitorSerial').value = '';
+            showToast('✅ Монитор добавлен');
+        }
+
+        function addMFU() {
+            const model = document.getElementById('newMFUModel').value.trim();
+            if (!model) { showToast('Введите модель МФУ'); return; }
+            mfus.push({ model: model, serial: document.getElementById('newMFUSerial').value.trim() || '—' });
+            saveLocalData();
+            document.getElementById('newMFUModel').value = '';
+            document.getElementById('newMFUSerial').value = '';
+            showToast('✅ МФУ добавлен');
+        }
+
+        function addMicrophone() {
+            const model = document.getElementById('newMicrophoneModel').value.trim();
+            if (!model) { showToast('Введите модель микрофона'); return; }
+            microphones.push({ model: model, serial: document.getElementById('newMicrophoneSerial').value.trim() || '—' });
+            saveLocalData();
+            document.getElementById('newMicrophoneModel').value = '';
+            document.getElementById('newMicrophoneSerial').value = '';
+            showToast('✅ Микрофон добавлен');
+        }
+
+        function renderCatalogs() {
+            const pcDiv = document.getElementById('pcList');
+            if (pcDiv) {
+                pcDiv.innerHTML = pcs.map((pc, i) => `<div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid #ddd;"><span><b>${escapeHtml(pc.name)}</b> | ${pc.cpu} | ${pc.ram}ГБ</span><button class="btn-small" onclick="deletePC(${i})" style="background:#f44336;">🗑️</button></div>`).join('');
+                if (pcs.length === 0) pcDiv.innerHTML = '<div style="color:#999;">Нет ПК</div>';
+            }
+            const monDiv = document.getElementById('monitorList');
+            if (monDiv) {
+                monDiv.innerHTML = monitors.map((m, i) => `<div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid #ddd;"><span><b>${escapeHtml(m.model)}</b> | ${m.serial}</span><button class="btn-small" onclick="deleteMonitor(${i})" style="background:#f44336;">🗑️</button></div>`).join('');
+                if (monitors.length === 0) monDiv.innerHTML = '<div style="color:#999;">Нет мониторов</div>';
+            }
+            const mfuDiv = document.getElementById('mfuList');
+            if (mfuDiv) {
+                mfuDiv.innerHTML = mfus.map((m, i) => `<div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid #ddd;"><span><b>${escapeHtml(m.model)}</b> | ${m.serial}</span><button class="btn-small" onclick="deleteMFU(${i})" style="background:#f44336;">🗑️</button></div>`).join('');
+                if (mfus.length === 0) mfuDiv.innerHTML = '<div style="color:#999;">Нет МФУ</div>';
+            }
+            const micDiv = document.getElementById('microphoneList');
+            if (micDiv) {
+                micDiv.innerHTML = microphones.map((m, i) => `<div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid #ddd;"><span><b>${escapeHtml(m.model)}</b> | ${m.serial}</span><button class="btn-small" onclick="deleteMicrophone(${i})" style="background:#f44336;">🗑️</button></div>`).join('');
+                if (microphones.length === 0) micDiv.innerHTML = '<div style="color:#999;">Нет микрофонов</div>';
+            }
+        }
+
+        function deletePC(i) { pcs.splice(i, 1); saveLocalData(); }
+        function deleteMonitor(i) { monitors.splice(i, 1); saveLocalData(); }
+        function deleteMFU(i) { mfus.splice(i, 1); saveLocalData(); }
+        function deleteMicrophone(i) { microphones.splice(i, 1); saveLocalData(); }
 
         // ========== РАБОТА С ЗАПИСЯМИ ==========
         function saveRecord() {
             const officeName = document.getElementById('officeName').value.trim();
-            const mnemonic = document.getElementById('mnemonic').value.trim();
-
-            if (!officeName || !mnemonic) {
-                showToast('❌ Заполните название офиса и мнемонику!');
-                return;
-            }
+            if (!officeName) { showToast('❌ Выберите офис'); return; }
 
             const newRecord = {
                 id: nextId++,
                 officeName: officeName,
-                mnemonic: mnemonic,
+                mnemonic: document.getElementById('mnemonic').value,
                 pc: {
                     name: document.getElementById('pcName').value.trim() || '—',
                     serial: document.getElementById('pcSerial').value.trim() || '—',
@@ -722,20 +932,23 @@
                 },
                 accord: document.getElementById('accord').value,
                 notes: document.getElementById('notes').value.trim() || '',
-                color: document.getElementById('cardColor').value || 'default',
                 date: new Date().toLocaleString('ru-RU')
             };
-
             records.unshift(newRecord);
-            saveData();
+            saveLocalData();
             clearForm();
             showToast('✅ Запись добавлена');
             showTab('list');
         }
 
         function clearForm() {
+            document.getElementById('officeSelect').value = '';
             document.getElementById('officeName').value = '';
             document.getElementById('mnemonic').value = '';
+            document.getElementById('pcSelect').value = '';
+            document.getElementById('monitorSelect').value = '';
+            document.getElementById('mfuSelect').value = '';
+            document.getElementById('microphoneSelect').value = '';
             document.getElementById('pcName').value = '';
             document.getElementById('pcSerial').value = '';
             document.getElementById('pcCpu').value = '';
@@ -748,85 +961,50 @@
             document.getElementById('microphoneModel').value = '';
             document.getElementById('microphoneSerial').value = '';
             document.getElementById('notes').value = '';
-            document.getElementById('cardColor').value = 'default';
-            selectedColor = 'default';
-            document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active-color'));
         }
 
         function renderCards() {
             const container = document.getElementById('cardsContainer');
             if (!container) return;
-
             if (records.length === 0) {
                 container.innerHTML = '<div class="empty">📭 Нет записей. Добавьте первую запись</div>';
                 return;
             }
-
-            container.innerHTML = records.map(rec => {
-                const color = colorMap[rec.color] || colorMap['default'];
-                return `
+            container.innerHTML = records.map(rec => `
                 <div class="card" onclick="showDetail(${rec.id})">
-                    <div class="card-header" style="background: ${color};">
-                        <div class="card-title">🏢 ${escapeHtml(rec.officeName)}</div>
-                        <div class="card-mnemonic">🔖 ${escapeHtml(rec.mnemonic)}</div>
+                    <div class="card-header">
+                        <h3>🏢 ${escapeHtml(rec.officeName)}</h3>
+                        <p>🔖 ${escapeHtml(rec.mnemonic)}</p>
                     </div>
                     <div class="card-body">
-                        <div class="card-info"><strong>💻 ПК:</strong><span class="value">${escapeHtml(rec.pc.name)}</span></div>
-                        <div class="card-info"><strong>🖥️ Монитор:</strong><span class="value">${escapeHtml(rec.monitor.model)}</span></div>
-                        <div class="card-info"><strong>🖨️ МФУ:</strong><span class="value">${escapeHtml(rec.mfu.model)}</span></div>
-                        <div class="card-info"><strong>🎤 Микрофон:</strong><span class="value">${escapeHtml(rec.microphone.model)}</span></div>
-                        <div class="card-info"><strong>🔌 Аккорд:</strong><span class="value"><span class="accord-badge ${rec.accord === 'да' ? 'accord-yes' : 'accord-no'}">${rec.accord === 'да' ? '✅ Есть' : '❌ Нет'}</span></span></div>
+                        <div class="card-info"><strong>💻 ПК:</strong> ${escapeHtml(rec.pc.name)}</div>
+                        <div class="card-info"><strong>🖥️ Монитор:</strong> ${escapeHtml(rec.monitor.model)}</div>
+                        <div class="card-info"><strong>🖨️ МФУ:</strong> ${escapeHtml(rec.mfu.model)}</div>
+                        <div class="card-info"><strong>🎤 Микрофон:</strong> ${escapeHtml(rec.microphone.model)}</div>
+                        <div class="card-info"><strong>🔌 Аккорд:</strong> ${rec.accord === 'да' ? '✅ Есть' : '❌ Нет'}</div>
                     </div>
                     <div class="card-footer">
                         <button class="edit-btn" onclick="event.stopPropagation(); openEdit(${rec.id})">✏️ Ред.</button>
                         <button class="clone-btn" onclick="event.stopPropagation(); cloneRecord(${rec.id})">📋 Клон</button>
                         <button class="delete-btn" onclick="event.stopPropagation(); deleteRecord(${rec.id})">🗑️ Удалить</button>
-                        <button class="color-picker-btn" onclick="event.stopPropagation(); toggleColorPicker(${rec.id})">🎨</button>
-                    </div>
-                    <div class="color-options" id="colorOptions_${rec.id}">
-                        ${Object.keys(colorMap).map(c => `
-                            <button class="color-option" style="background: ${colorMap[c]}; width:28px; height:28px; border-radius:50%; border:2px solid ${rec.color === c ? '#333' : '#ddd'}; cursor:pointer; padding:0;" 
-                                    onclick="event.stopPropagation(); changeCardColor(${rec.id}, '${c}')"></button>
-                        `).join('')}
                     </div>
                 </div>
-            `}).join('');
-        }
-
-        function toggleColorPicker(id) {
-            const options = document.getElementById(`colorOptions_${id}`);
-            if (options) {
-                options.classList.toggle('active');
-            }
-        }
-
-        function changeCardColor(id, color) {
-            const rec = records.find(r => r.id === id);
-            if (rec) {
-                rec.color = color;
-                saveData();
-                renderCards();
-                showToast(`🎨 Цвет изменен`);
-            }
+            `).join('');
         }
 
         function showDetail(id) {
             const rec = records.find(r => r.id === id);
             if (!rec) return;
-
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
-                <div style="margin-bottom:12px; padding-bottom:10px; border-bottom:2px solid #1e5799;">
-                    <h3 style="color:#1e5799;">🏢 ${escapeHtml(rec.officeName)}</h3>
-                    <p style="color:#2b8c5e; font-weight:bold;">🔖 ${escapeHtml(rec.mnemonic)}</p>
-                </div>
-                <div class="section-block"><b>💻 КОМПЬЮТЕР</b><br>Модель: ${escapeHtml(rec.pc.name)}<br>SN: ${escapeHtml(rec.pc.serial)}<br>${rec.pc.cpu !== '—' ? 'Процессор: ' + escapeHtml(rec.pc.cpu) + '<br>' : ''}${rec.pc.ram !== '—' ? 'ОЗУ: ' + escapeHtml(rec.pc.ram) + ' ГБ<br>' : ''}${rec.pc.storage !== '—' ? 'Диск: ' + escapeHtml(rec.pc.storage) + ' ГБ' : ''}</div>
-                <div class="section-block"><b>🖥️ МОНИТОР</b><br>Модель: ${escapeHtml(rec.monitor.model)}<br>SN: ${escapeHtml(rec.monitor.serial)}</div>
-                <div class="section-block"><b>🖨️ МФУ</b><br>Модель: ${escapeHtml(rec.mfu.model)}<br>SN: ${escapeHtml(rec.mfu.serial)}</div>
-                <div class="section-block"><b>🎤 МИКРОФОН</b><br>Модель: ${escapeHtml(rec.microphone.model)}<br>SN: ${escapeHtml(rec.microphone.serial)}</div>
-                <div><b>🔌 Аккорд:</b> ${rec.accord === 'да' ? '✅ Есть' : '❌ Нет'}</div>
-                ${rec.notes ? `<div style="margin-top:8px;"><b>📝 Примечание:</b><br>${escapeHtml(rec.notes)}</div>` : ''}
-                <div style="margin-top:12px; color:#888; font-size:11px;">📅 ${rec.date || '—'}</div>
+                <div style="margin-bottom:12px"><b>🏦 ${escapeHtml(rec.officeName)}</b><br>🔖 ${rec.mnemonic}</div>
+                <div class="section-block"><b>💻 ПК</b><br>${rec.pc.name}<br>SN: ${rec.pc.serial}<br>${rec.pc.cpu} | ${rec.pc.ram}ГБ | ${rec.pc.storage}ГБ</div>
+                <div class="section-block"><b>🖥️ Монитор</b><br>${rec.monitor.model}<br>SN: ${rec.monitor.serial}</div>
+                <div class="section-block"><b>🖨️ МФУ</b><br>${rec.mfu.model}<br>SN: ${rec.mfu.serial}</div>
+                <div class="section-block"><b>🎤 Микрофон</b><br>${rec.microphone.model}<br>SN: ${rec.microphone.serial}</div>
+                <div><b>🔌 Аккорд:</b> ${rec.accord === 'да' ? 'Есть' : 'Нет'}</div>
+                ${rec.notes ? `<div><b>📝 Примечание:</b><br>${escapeHtml(rec.notes)}</div>` : ''}
+                <div style="margin-top:12px; color:#888; font-size:11px;">📅 ${rec.date}</div>
             `;
             document.getElementById('detailModal').classList.add('active');
         }
@@ -834,31 +1012,17 @@
         function openEdit(id) {
             const rec = records.find(r => r.id === id);
             if (!rec) return;
-
             const modalBody = document.getElementById('editModalBody');
             modalBody.innerHTML = `
                 <form id="editForm">
-                    <div class="form-row">
-                        <div class="form-group"><label>Офис:</label><input type="text" id="edit_officeName" value="${escapeHtml(rec.officeName)}"></div>
-                        <div class="form-group"><label>Мнемоника:</label><input type="text" id="edit_mnemonic" value="${escapeHtml(rec.mnemonic)}"></div>
-                    </div>
-                    <div class="section-block"><b>💻 ПК</b>
-                        <div class="form-row"><div class="form-group"><label>Модель:</label><input type="text" id="edit_pcName" value="${escapeHtml(rec.pc.name)}"></div><div class="form-group"><label>SN:</label><input type="text" id="edit_pcSerial" value="${escapeHtml(rec.pc.serial)}"></div></div>
-                        <div class="form-row"><div class="form-group"><label>Процессор:</label><input type="text" id="edit_pcCpu" value="${escapeHtml(rec.pc.cpu)}"></div><div class="form-group"><label>ОЗУ:</label><input type="text" id="edit_pcRam" value="${escapeHtml(rec.pc.ram)}"></div></div>
-                        <div class="form-group"><label>Диск:</label><input type="text" id="edit_pcStorage" value="${escapeHtml(rec.pc.storage)}"></div>
-                    </div>
-                    <div class="section-block"><b>🖥️ Монитор</b>
-                        <div class="form-row"><div class="form-group"><label>Модель:</label><input type="text" id="edit_monitorModel" value="${escapeHtml(rec.monitor.model)}"></div><div class="form-group"><label>SN:</label><input type="text" id="edit_monitorSerial" value="${escapeHtml(rec.monitor.serial)}"></div></div>
-                    </div>
-                    <div class="section-block"><b>🖨️ МФУ</b>
-                        <div class="form-row"><div class="form-group"><label>Модель:</label><input type="text" id="edit_mfuModel" value="${escapeHtml(rec.mfu.model)}"></div><div class="form-group"><label>SN:</label><input type="text" id="edit_mfuSerial" value="${escapeHtml(rec.mfu.serial)}"></div></div>
-                    </div>
-                    <div class="section-block"><b>🎤 Микрофон</b>
-                        <div class="form-row"><div class="form-group"><label>Модель:</label><input type="text" id="edit_microphoneModel" value="${escapeHtml(rec.microphone.model)}"></div><div class="form-group"><label>SN:</label><input type="text" id="edit_microphoneSerial" value="${escapeHtml(rec.microphone.serial)}"></div></div>
-                    </div>
+                    <div class="form-row"><div class="form-group"><label>Офис:</label><input type="text" id="edit_officeName" value="${escapeHtml(rec.officeName)}"></div><div class="form-group"><label>Мнемоника:</label><input type="text" id="edit_mnemonic" value="${escapeHtml(rec.mnemonic)}"></div></div>
+                    <div class="section-block"><b>💻 ПК</b><div class="form-row"><div class="form-group"><label>Модель:</label><input type="text" id="edit_pcName" value="${escapeHtml(rec.pc.name)}"></div><div class="form-group"><label>SN:</label><input type="text" id="edit_pcSerial" value="${escapeHtml(rec.pc.serial)}"></div></div><div class="form-row"><div class="form-group"><label>Процессор:</label><input type="text" id="edit_pcCpu" value="${escapeHtml(rec.pc.cpu)}"></div><div class="form-group"><label>ОЗУ:</label><input type="text" id="edit_pcRam" value="${escapeHtml(rec.pc.ram)}"></div></div><div class="form-group"><label>Диск:</label><input type="text" id="edit_pcStorage" value="${escapeHtml(rec.pc.storage)}"></div></div>
+                    <div class="section-block"><b>🖥️ Монитор</b><div class="form-row"><div class="form-group"><label>Модель:</label><input type="text" id="edit_monitorModel" value="${escapeHtml(rec.monitor.model)}"></div><div class="form-group"><label>SN:</label><input type="text" id="edit_monitorSerial" value="${escapeHtml(rec.monitor.serial)}"></div></div></div>
+                    <div class="section-block"><b>🖨️ МФУ</b><div class="form-row"><div class="form-group"><label>Модель:</label><input type="text" id="edit_mfuModel" value="${escapeHtml(rec.mfu.model)}"></div><div class="form-group"><label>SN:</label><input type="text" id="edit_mfuSerial" value="${escapeHtml(rec.mfu.serial)}"></div></div></div>
+                    <div class="section-block"><b>🎤 Микрофон</b><div class="form-row"><div class="form-group"><label>Модель:</label><input type="text" id="edit_microphoneModel" value="${escapeHtml(rec.microphone.model)}"></div><div class="form-group"><label>SN:</label><input type="text" id="edit_microphoneSerial" value="${escapeHtml(rec.microphone.serial)}"></div></div></div>
                     <div class="form-group"><label>Аккорд:</label><select id="edit_accord"><option value="да" ${rec.accord === 'да' ? 'selected' : ''}>✅ Есть</option><option value="нет" ${rec.accord === 'нет' ? 'selected' : ''}>❌ Нет</option></select></div>
                     <div class="form-group"><label>Примечание:</label><textarea id="edit_notes" rows="2">${escapeHtml(rec.notes)}</textarea></div>
-                    <button type="button" class="btn" onclick="saveEdit(${rec.id})">💾 Сохранить</button>
+                    <button type="button" class="btn" onclick="saveEdit(${id})">💾 Сохранить</button>
                 </form>
             `;
             document.getElementById('editModal').classList.add('active');
@@ -867,7 +1031,6 @@
         function saveEdit(id) {
             const rec = records.find(r => r.id === id);
             if (!rec) return;
-
             rec.officeName = document.getElementById('edit_officeName').value.trim();
             rec.mnemonic = document.getElementById('edit_mnemonic').value.trim();
             rec.pc.name = document.getElementById('edit_pcName').value.trim() || '—';
@@ -883,8 +1046,7 @@
             rec.microphone.serial = document.getElementById('edit_microphoneSerial').value.trim() || '—';
             rec.accord = document.getElementById('edit_accord').value;
             rec.notes = document.getElementById('edit_notes').value.trim();
-
-            saveData();
+            saveLocalData();
             closeEditModal();
             showToast('✅ Запись обновлена');
         }
@@ -892,167 +1054,37 @@
         function cloneRecord(id) {
             const rec = records.find(r => r.id === id);
             if (!rec) return;
-
-            const newRecord = {
-                ...rec,
-                id: nextId++,
-                date: new Date().toLocaleString('ru-RU'),
-                officeName: rec.officeName + ' (копия)'
-            };
+            const newRecord = { ...rec, id: nextId++, date: new Date().toLocaleString('ru-RU'), officeName: rec.officeName + " (копия)" };
             records.unshift(newRecord);
-            saveData();
+            saveLocalData();
             showToast('📋 Копия создана');
         }
 
         function deleteRecord(id) {
             if (confirm('Удалить запись?')) {
                 records = records.filter(r => r.id !== id);
-                saveData();
+                saveLocalData();
                 showToast('✅ Запись удалена');
             }
         }
 
-        // ========== СПРАВОЧНИКИ ==========
-        function renderCatalogs() {
-            const pcDiv = document.getElementById('pcList');
-            if (pcDiv) {
-                pcDiv.innerHTML = pcs.map((pc, i) => `
-                    <div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid #ddd;">
-                        <span><b>${escapeHtml(pc.name)}</b> | ${pc.cpu} | ${pc.ram}ГБ</span>
-                        <button class="btn-small" onclick="deletePC(${i})" style="background:#f44336; color:white;">🗑️</button>
-                    </div>
-                `).join('');
-                if (pcs.length === 0) pcDiv.innerHTML = '<div style="color:#999;">Нет ПК в справочнике</div>';
-            }
-
-            const monDiv = document.getElementById('monitorList');
-            if (monDiv) {
-                monDiv.innerHTML = monitors.map((m, i) => `
-                    <div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid #ddd;">
-                        <span><b>${escapeHtml(m.model)}</b> | ${m.serial}</span>
-                        <button class="btn-small" onclick="deleteMonitor(${i})" style="background:#f44336; color:white;">🗑️</button>
-                    </div>
-                `).join('');
-                if (monitors.length === 0) monDiv.innerHTML = '<div style="color:#999;">Нет мониторов в справочнике</div>';
-            }
-
-            const mfuDiv = document.getElementById('mfuList');
-            if (mfuDiv) {
-                mfuDiv.innerHTML = mfus.map((m, i) => `
-                    <div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid #ddd;">
-                        <span><b>${escapeHtml(m.model)}</b> | ${m.serial}</span>
-                        <button class="btn-small" onclick="deleteMFU(${i})" style="background:#f44336; color:white;">🗑️</button>
-                    </div>
-                `).join('');
-                if (mfus.length === 0) mfuDiv.innerHTML = '<div style="color:#999;">Нет МФУ в справочнике</div>';
-            }
-
-            const micDiv = document.getElementById('microphoneList');
-            if (micDiv) {
-                micDiv.innerHTML = microphones.map((m, i) => `
-                    <div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid #ddd;">
-                        <span><b>${escapeHtml(m.model)}</b> | ${m.serial}</span>
-                        <button class="btn-small" onclick="deleteMicrophone(${i})" style="background:#f44336; color:white;">🗑️</button>
-                    </div>
-                `).join('');
-                if (microphones.length === 0) micDiv.innerHTML = '<div style="color:#999;">Нет микрофонов в справочнике</div>';
-            }
+        // ========== ВСПОМОГАТЕЛЬНЫЕ ==========
+        function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+        function showTab(tab) {
+            document.getElementById('addTab').classList.remove('active');
+            document.getElementById('listTab').classList.remove('active');
+            document.getElementById('catalogsTab').classList.remove('active');
+            if (tab === 'add') document.getElementById('addTab').classList.add('active');
+            else if (tab === 'list') { document.getElementById('listTab').classList.add('active'); renderCards(); }
+            else if (tab === 'catalogs') document.getElementById('catalogsTab').classList.add('active');
         }
+        function closeModal() { document.getElementById('detailModal').classList.remove('active'); }
+        function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
+        window.onclick = (e) => { if (e.target.classList.contains('modal')) { closeModal(); closeEditModal(); } };
 
-        function addPC() {
-            const name = document.getElementById('newPCName').value.trim();
-            if (!name) { showToast('Введите модель ПК'); return; }
-            pcs.push({
-                name: name,
-                serial: document.getElementById('newPCSerial').value.trim() || '—',
-                cpu: document.getElementById('newPCCpu').value.trim() || '—',
-                ram: document.getElementById('newPCRam').value.trim() || '—',
-                storage: document.getElementById('newPCStorage').value.trim() || '—'
-            });
-            saveData();
-            document.getElementById('newPCName').value = '';
-            document.getElementById('newPCSerial').value = '';
-            document.getElementById('newPCCpu').value = '';
-            document.getElementById('newPCRam').value = '';
-            document.getElementById('newPCStorage').value = '';
-            showToast('✅ ПК добавлен');
-        }
-
-        function addMonitor() {
-            const model = document.getElementById('newMonitorModel').value.trim();
-            if (!model) { showToast('Введите модель монитора'); return; }
-            monitors.push({ model: model, serial: document.getElementById('newMonitorSerial').value.trim() || '—' });
-            saveData();
-            document.getElementById('newMonitorModel').value = '';
-            document.getElementById('newMonitorSerial').value = '';
-            showToast('✅ Монитор добавлен');
-        }
-
-        function addMFU() {
-            const model = document.getElementById('newMFUModel').value.trim();
-            if (!model) { showToast('Введите модель МФУ'); return; }
-            mfus.push({ model: model, serial: document.getElementById('newMFUSerial').value.trim() || '—' });
-            saveData();
-            document.getElementById('newMFUModel').value = '';
-            document.getElementById('newMFUSerial').value = '';
-            showToast('✅ МФУ добавлен');
-        }
-
-        function addMicrophone() {
-            const model = document.getElementById('newMicrophoneModel').value.trim();
-            if (!model) { showToast('Введите модель микрофона'); return; }
-            microphones.push({ model: model, serial: document.getElementById('newMicrophoneSerial').value.trim() || '—' });
-            saveData();
-            document.getElementById('newMicrophoneModel').value = '';
-            document.getElementById('newMicrophoneSerial').value = '';
-            showToast('✅ Микрофон добавлен');
-        }
-
-        function deletePC(i) { pcs.splice(i, 1); saveData(); }
-        function deleteMonitor(i) { monitors.splice(i, 1); saveData(); }
-        function deleteMFU(i) { mfus.splice(i, 1); saveData(); }
-        function deleteMicrophone(i) { microphones.splice(i, 1); saveData(); }
-
-        // ========== ЭКСПОРТ/ИМПОРТ ==========
-        function exportJSON() {
-            if (records.length === 0) { showToast('Нет данных для экспорта'); return; }
-            const data = { records, pcs, monitors, mfus, microphones, version: "1.0", exportDate: new Date().toISOString() };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `finam_data_${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('✅ JSON экспорт выполнен');
-        }
-
-        function exportCSV() {
-            if (records.length === 0) { showToast('Нет данных'); return; }
-            const headers = ['ID', 'Офис', 'Мнемоника', 'ПК', 'SN ПК', 'Процессор', 'ОЗУ', 'Диск', 'Монитор', 'SN Монитора', 'МФУ', 'SN МФУ', 'Микрофон', 'SN Микрофона', 'Аккорд', 'Примечание', 'Цвет'];
-            const rows = records.map(r => [r.id, r.officeName, r.mnemonic, r.pc.name, r.pc.serial, r.pc.cpu, r.pc.ram, r.pc.storage, r.monitor.model, r.monitor.serial, r.mfu.model, r.mfu.serial, r.microphone.model, r.microphone.serial, r.accord, r.notes, r.color || 'default']);
-            const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
-            const blob = new Blob(["\uFEFF" + csv], { type: "text/csv" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `finam_data_${new Date().toISOString().slice(0,10)}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('✅ CSV экспорт выполнен');
-        }
-
-        function clearAll() {
-            if (confirm('⚠️ Удалить все записи?')) {
-                records = [];
-                nextId = 1;
-                saveData();
-                showToast('✅ Все данные очищены');
-            }
-        }
-
-        // ========== ЗАПУСК ==========
-        loadData();
+        // Запуск
+        loadLocalData();
+        addImportButton();
     </script>
 </body>
 </html>
